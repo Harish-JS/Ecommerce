@@ -1,0 +1,97 @@
+$primary: #7a7a7a;
+
+.alpha_container {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  @include flex-column;
+  justify-content: flex-start;
+  padding: 2em 0;
+  .heading {
+    font-size: 4rem;
+  }
+  .home_btns {
+    @include flex-row;
+    gap: 1em;
+    margin-top: 20px;
+  }
+  .top_bar {
+    @include flex-row;
+    width: 90%;
+    justify-content: space-between;
+    margin: 1em 0;
+    .row {
+      @include flex-row;
+      gap: 1em;
+      input,
+      select {
+        background: #fff;
+        padding: 0.5em 1em;
+        outline: none;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 0 4px #0007;
+      }
+    }
+  }
+  .section {
+    width: 100%;
+    min-height: 60vh;
+    @include flex-custom(space-between, center, column);
+  }
+  .table {
+    width: 90%;
+    height: 100%;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    thead th {
+      padding: 0.75em 1em;
+      background: $primary;
+      color: #fff;
+    }
+    tbody {
+      td {
+        padding: 0.5em 1em;
+      }
+      tr:nth-child(even) {
+        background: #d6d6d688;
+      }
+    }
+  }
+  .pagination_btns {
+    width: 100%;
+    @include flex-row;
+    justify-content: space-around;
+    gap: 1em;
+    font-weight: 800;
+    .btns {
+      @include flex-row;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      width: 50%;
+    }
+  }
+  .btn {
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background: $primary;
+    color: #fff;
+    border-radius: 4px;
+  }
+  .disabled {
+    opacity: 0.4;
+  }
+  .active {
+    background: #000;
+  }
+}
