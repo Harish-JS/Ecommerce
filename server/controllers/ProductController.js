@@ -26,7 +26,7 @@ export const fetchProducts = async (req, res) => {
 export const searchProducts = async (req, res) => {
   const client = solr.createClient({
     host: process.env.SOLR_HOST,
-    port: "8983",
+    port: process.env.SOLR_PORT,
     core: process.env.SOLR_CORE,
     protocol: "http",
   });

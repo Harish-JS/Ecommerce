@@ -1,34 +1,31 @@
 import mysql from "mysql2";
-import axios from "axios";
 import { configDotenv } from "dotenv";
+import solr from "solr-client";
 
 configDotenv();
-
-console.log(process.env.MYSQL_HOST);
 
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
-  connectionLimit: 10,
 });
 
-const solrUrl = process.env.SOLR_URL;
+const client = solr.createClient({
+  host: process.env.SOLR_HOST,
+  port: process.env.SOLR_PORT,
+  core: process.env.SOLR_CORE,
+  protocol: "http",
+});
 
-const indexDataIntoSolr = (data) => {
-  axios
-    .post(solrUrl, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      console.log("Data indexed successfully:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error indexing data into Solr:", error);
+const indexDataIntoSolr = (products) => {
+  products.forEach((product) => {
+    client.add(product, { overwrite: true }, () => {
+      client.commit(() => {
+        console.log("Product indexed in Solr:", product);
+      });
     });
+  });
 };
 
 const fetchDataAndIndex = () => {
@@ -38,30 +35,35 @@ const fetchDataAndIndex = () => {
       console.error("Error executing SQL query:", err);
       return;
     }
-    const solrData = result.map((row) => ({
-      id: row.product_id,
-      product_name: row.product_name,
-      category_id: row.category_id,
-      category_name: row.category_name,
-      product_brand: row.product_brand,
-      mrp: row.mrp,
-      discounted_price: row.discounted_price,
-      created_date: row.created_date,
-    }));
-    indexDataIntoSolr(solrData);
+    indexDataIntoSolr(result);
   });
 };
 
-axios
-  .get("http://localhost:8983/solr/mycore/select?q=*:*&rows=1")
-  .then((response) => {
-    const isDataIndexed = response.data.response.numFound > 0;
-    if (!isDataIndexed) {
-      fetchDataAndIndex();
-    }
-  })
-  .catch((error) => {
-    console.error("Error checking Solr index:", error);
-  });
+export const checkSolrIndex = async () => {
+  // const maxRetries = 10;
+  // let retries = 0;
+  setTimeout(() => {
+    fetchDataAndIndex();
+  }, 6000);
+
+  // const retryCheckIndex = async () => {
+  //   try {
+  //     fetchDataAndIndex();
+  //   } catch (error) {
+  //     console.error("Error checking Solr index:", error);
+  //     retries++;
+  //     if (retries < maxRetries) {
+  //       console.log(`Retrying (${retries}/${maxRetries})...`);
+  //       await new Promise((resolve) => setTimeout(resolve, 5000));
+  //       await retryCheckIndex();
+  //     } else {
+  //       console.error(`Max retries reached. Exiting...`);
+  //       process.exit(1);
+  //     }
+  //   }
+  // };
+
+  // await retryCheckIndex();
+};
 
 export default connection;
