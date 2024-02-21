@@ -1,6 +1,6 @@
-FROM node:latest
-WORKDIR /app
-COPY package.json .
+FROM node:alpine
+WORKDIR /app1
+COPY package*.json .
 RUN npm install
 COPY . .
 EXPOSE 3000

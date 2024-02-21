@@ -1,0 +1,16 @@
+<dataConfig>
+ <dataSource type="JdbcDataSource" 
+              driver="com.mysql.cj.jdbc.Driver" 
+              url="jdbc:mysql://localhost:3306/mydb" 
+              user="asrith" 
+              password="asrith123"/>
+ <document>
+    <entity name="example" 
+            query="SELECT cat_id, cat_name, stock, created_date FROM your_table">
+      <field column="cat_id" name="id" />
+      <field column="cat_name" name="name" />
+      <field column="stock" name="description" />
+      <field column="created_date" name="created_date" />
+    </entity>
+  </document>
+</dataConfig>

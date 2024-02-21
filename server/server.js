@@ -19,6 +19,15 @@ connection.connect((err) => {
 const app = express();
 const port = process.env.PORT || 5050;
 
+app.get("/sample", (req, res) => {
+  const query = "select * from categories";
+  connection.query(query, (err, results) => {
+    if (err) throw err;
+    console.log(results);
+    res.json({ data: results });
+  });
+});
+
 app.use(express.json(), cors());
 app.use("/product", productRoutes);
 app.use("/category", categoryRoutes);

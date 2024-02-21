@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+import mysql from "mysql";
 import { configDotenv } from "dotenv";
 import solr from "solr-client";
 
@@ -19,10 +19,11 @@ const client = solr.createClient({
 });
 
 const indexDataIntoSolr = (products) => {
+  client.deleteAll();
   products.forEach((product) => {
-    client.add(product, { overwrite: true }, () => {
+    client.add(product, () => {
       client.commit(() => {
-        console.log("Product indexed in Solr:", product);
+        console.log(product, "indexed");
       });
     });
   });

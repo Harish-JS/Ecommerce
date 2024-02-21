@@ -15,18 +15,18 @@ services:
     ports:
       - "5050:5050"
     environment:
-      PORT: "5050"
-      MYSQL_HOST: sql6.freesqldatabase.com
-      MYSQL_USER: sql6685208
-      MYSQL_PASSWORD: NZ6k2HWftb
-      MYSQL_DATABASE: sql6685208
-      SOLR_HOST: solr
-      SOLR_CORE: mycore
-      SOLR_PORT: 8983
+      - PORT=5050
+      - MYSQL_HOST=sql6.freesqldatabase.com
+      - MYSQL_USER=sql6685208
+      - MYSQL_PASSWORD=NZ6k2HWftb
+      - MYSQL_DATABASE=sql6685208
+      - SOLR_HOST=solr
+      - SOLR_CORE=mycore
+      - SOLR_PORT=8983
     depends_on:
       - solr
     networks:
-      - main
+      - host
 
   solr:
     image: solr:latest
@@ -45,7 +45,6 @@ services:
         bin/solr create -c mycore -d /opt/solr/server/solr/configsets/mycore_conf && wait
       "
     networks:
-      - main
-
+      - host
 networks:
-  main:
+  host:

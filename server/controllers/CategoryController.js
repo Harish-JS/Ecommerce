@@ -12,7 +12,7 @@ export const fetchCategories = async (req, res) => {
       res.json({ data: result, count: result[0].rowCount });
     });
   } catch (err) {
-    res.status(500).error(err);
+    res.status(500).json(err);
   }
 };
 

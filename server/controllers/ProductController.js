@@ -67,15 +67,15 @@ export const searchProducts = async (req, res) => {
     if (price) {
       if (userQuery.includes("below") || userQuery.includes("under")) {
         endingPrice = parsePrice(price);
+      } else if (userQuery.includes("between") && price.includes("and")) {
+        const priceParts = price.split("and");
+        const start = priceParts[0].trim();
+        const end = priceParts[1].trim();
+        startingPrice = start ? parsePrice(start) : 0;
+        endingPrice = end ? parsePrice(end) : 100000;
       } else {
         startingPrice = parsePrice(price);
       }
-    }
-    if (userQuery.includes("between") && price.includes("and")) {
-      const start = price?.split("and")[0];
-      const end = price?.split("and")[1];
-      startingPrice = start ? parsePrice(start) : 0;
-      endingPrice = end ? parsePrice(end) : 100000;
     }
     let query = client
       .query()
